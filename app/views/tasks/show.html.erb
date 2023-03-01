@@ -1,0 +1,13 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>タスク名</strong>
+  <%= @task.title %>
+</p>
+<p>
+  <strong>コメント</strong>
+  <%= @task.content %>
+</p>
+
+<%= link_to 'Edit', edit_task_path(@task) %> |
+<%= link_to 'Back', tasks_path %>
