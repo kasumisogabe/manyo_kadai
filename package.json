@@ -12,7 +12,7 @@
   },
   "engines": {
     "node": "16.x"
-  }
+  },
   "version": "0.1.0",
   "devDependencies": {
     "webpack-dev-server": "^3"
