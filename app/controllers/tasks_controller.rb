@@ -1,7 +1,6 @@
 class TasksController < ApplicationController
   before_action :set_task, only: %i[ show edit update destroy ]
 
-  # GET /tasks or /tasks.json
   def index
     if params[:sort_limit]
       @tasks = Task.latest
@@ -10,20 +9,16 @@ class TasksController < ApplicationController
     end
   end
 
-  # GET /tasks/1 or /tasks/1.json
   def show
   end
 
-  # GET /tasks/new
   def new
     @task = Task.new
   end
 
-  # GET /tasks/1/edit
   def edit
   end
 
-  # POST /tasks or /tasks.json
   def create
     @task = Task.new(task_params)
 
@@ -38,7 +33,6 @@ class TasksController < ApplicationController
     end
   end
 
-  # PATCH/PUT /tasks/1 or /tasks/1.json
   def update
     respond_to do |format|
       if @task.update(task_params)
@@ -51,7 +45,6 @@ class TasksController < ApplicationController
     end
   end
 
-  # DELETE /tasks/1 or /tasks/1.json
   def destroy
     @task.destroy
 
@@ -62,26 +55,25 @@ class TasksController < ApplicationController
   end
 
   def search
-    keyword = params[:keyword]
-    status = params[:status]
-    if keyword.present? && status.present?
-      @tasks = Task.where("title LIKE ? AND status = ?", "%#{keyword}%", status)
-    elsif keyword.present?
-      @tasks = Task.where("title LIKE ?", "%#{keyword}%")
-    elsif status.present?
-      @tasks = Task.where("status = ?", status)
-    else
-      @tasks = Task.all
-    end
+    @tasks = Task.by_keyword(params[:keyword]).by_status(params[:status])
+    # keyword = params[:keyword]
+    # status = params[:status]
+    # if keyword.present? && status.present?
+    #   @tasks = Task.where("title LIKE ? AND status = ?", "%#{keyword}%", status)
+    # elsif keyword.present?
+    #   @tasks = Task.where("title LIKE ?", "%#{keyword}%")
+    # elsif status.present?
+    #   @tasks = Task.where("status = ?", status)
+    # else
+    #   @tasks = Task.all
+    # end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_task
       @task = Task.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
     def task_params
       params.require(:task).permit(:title, :content, :limit, :status, :priority)
     end
