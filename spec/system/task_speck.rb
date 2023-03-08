@@ -43,4 +43,19 @@ RSpec.describe 'タスク管理機能', type: :system do
       end
     end
   end
+
+  describe '終了期限ソート機能' do
+    context 'タスクが終了期限の降順に並んでいる場合' do
+      it '期限が先のタスクが一番上に表示される' do
+        task1 = FactoryBot.create(:task, title: 'task1', content: 'content1', limit: Time.current + 5.days)
+        task2 = FactoryBot.create(:task, title: 'task2', content: 'content2', limit: Time.current + 10.days)
+        visit tasks_path
+        click_on '終了期限でソートする'
+        sleep(0.5)
+        task_list = all('.task_list') 
+        expect(task_list[0]).to have_content 'task2'
+        expect(task_list[1]).to have_content 'task1'
+      end
+    end
+  end
 end
