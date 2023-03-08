@@ -6,9 +6,13 @@ RSpec.describe 'タスク管理機能', type: :system do
         visit new_task_path
         fill_in 'タスク名', with: 'test title'
         fill_in 'コメント', with: 'test description'
+        fill_in "終了期限", with: '2023-03-10'
+        select '着手中', from: 'ステータス'
         click_on '登録'
         expect(page).to have_content 'test title'
         expect(page).to have_content 'test description'
+        expect(page).to have_content '2023-03-10'
+        expect(page).to have_content '着手中'
       end
     end
   end
