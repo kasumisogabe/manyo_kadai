@@ -62,7 +62,17 @@ class TasksController < ApplicationController
   end
 
   def search
-    @tasks = Task.search(params[:keyword])
+    keyword = params[:keyword]
+    status = params[:status]
+    if keyword.present? && status.present?
+      @tasks = Task.where("title LIKE ? AND status = ?", "%#{keyword}%", status)
+    elsif keyword.present?
+      @tasks = Task.where("title LIKE ?", "%#{keyword}%")
+    elsif status.present?
+      @tasks = Task.where("status = ?", status)
+    else
+      @tasks = Task.all
+    end
   end
 
   private
