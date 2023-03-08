@@ -35,14 +35,14 @@
   <div class="field">
   <p>
     <%= form.label :status, "ステータス" %>
-    <%= form.text_field :status %>
+    <%= form.select :status, [["未着手", "未着手"], ["着手中", "着手中"], ["完了", "完了"]], include_blank: "選択して下さい" %>
   </p>
   </div>
 
   <div class="field">
   <p>
     <%= form.label :priority, "優先順位" %>
-    <%= form.text_field :priority %>
+    <%= form.select :priority, [["高", "高"], ["中", "中"], ["低", "低"]], include_blank: "選択して下さい" %>
   </p>
   </div>
 
