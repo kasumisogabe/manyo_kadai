@@ -5,4 +5,11 @@ FactoryBot.define do
     limit { '2023-03-10' }
     status { '着手中' }
   end
+
+  factory :second_task, class: Task do
+    title { 'テスト2' }
+    content { 'テストの内容2' }
+    limit {'2023-03-10'}
+    status {'未着手'}
+  end
 end
