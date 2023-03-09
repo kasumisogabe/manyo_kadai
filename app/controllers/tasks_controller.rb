@@ -4,10 +4,13 @@ class TasksController < ApplicationController
   def index
     if params[:sort_limit]
       @tasks = Task.latest
+      @tasks = Task.page(params[:page]).per(3)
     elsif params[:sort_priority]
       @tasks = Task.priority_sort
+      @tasks = Task.page(params[:page]).per(3)
     else
       @tasks = Task.all.order(created_at: :desc)
+      @tasks = Task.page(params[:page]).per(3)
     end
   end
 

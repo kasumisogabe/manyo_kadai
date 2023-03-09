@@ -39,3 +39,5 @@
   <%= f.select :status, [["未着手", "未着手"], ["着手中", "着手中"], ["完了", "完了"]], include_blank: "ステータスを選択して下さい" %>
     <%= f.submit "検索", class: "btn btn-secondary" %>
 <% end %>
+
+<%= paginate @tasks %>
