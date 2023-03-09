@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Tasks</h1>
+
+<table>
+  <thead>
+    <tr>
+    <th>タスク名</th>
+    <th>コメント</th>
+    <th>終了期限</th>
+    <th>ステータス</th>
+    <th>優先順位</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tasks.each do |task| %>
+      <tr class = "task_list">
+        <td><%= task.title %></td>
+        <td><%= task.content %></td>
+        <td><%= task.limit %></td>
+        <td><%= task.status %></td>
+        <td><%= task.priority %></td>
+        <td><%= link_to 'Show', task_path(task), class: "btn btn-info" %></td>
+        <td><%= link_to 'Edit', edit_task_path(task), class: "btn btn-success" %></td>
+        <td><%= link_to 'Destroy', task, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-dark" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= link_to 'Back', tasks_path, class: "btn btn-secondary" %>

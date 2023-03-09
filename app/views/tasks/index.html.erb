@@ -7,6 +7,10 @@
     <tr>
     <th>タスク名</th>
     <th>コメント</th>
+    <th><%= link_to "終了期限", tasks_path(sort_limit: "true") %></th>
+    <th>ステータス</th>
+    <th><%= link_to "優先順位", tasks_path(sort_priority: "true") %></th>
+    <td><%= task.priorities.key(tasks.priority) if @task %></td>
     </tr>
   </thead>
 
@@ -15,9 +19,12 @@
       <tr class = "task_list">
         <td><%= task.title %></td>
         <td><%= task.content %></td>
-        <td><%= link_to 'Show', task_path(task) %></td>
-        <td><%= link_to 'Edit', edit_task_path(task) %></td>
-        <td><%= link_to 'Destroy', task, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= task.limit %></td>
+        <td><%= task.status %></td>
+        <td><%= task.priority %></td>
+        <td><%= link_to 'Show', task_path(task), class: "btn btn-outline-primary" %></td>
+        <td><%= link_to 'Edit', edit_task_path(task), class: "btn btn-outline-success" %></td>
+        <td><%= link_to 'Destroy', task, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-outline-danger" %></td>
       </tr>
     <% end %>
   </tbody>
@@ -25,4 +32,12 @@
 
 <br>
 
-<%= link_to 'New Task', new_task_path %>
+<%= link_to 'New Task', new_task_path, class: "btn btn-primary" %>
+
+<%= form_with(url: search_tasks_path, local: true, method: :get, class: "search-form") do |f| %>
+  <%= f.text_field :keyword, placeholder: "キーワードで検索する", class: "search-input" %>
+  <%= f.select :status, [["未着手", "未着手"], ["着手中", "着手中"], ["完了", "完了"]], include_blank: "ステータスを選択して下さい" %>
+    <%= f.submit "検索", class: "btn btn-secondary" %>
+<% end %>
+
+<%= paginate @tasks %>
