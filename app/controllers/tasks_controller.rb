@@ -4,6 +4,8 @@ class TasksController < ApplicationController
   def index
     if params[:sort_limit]
       @tasks = Task.latest
+    elsif params[:sort_priority]
+      @tasks = Task.priority_sort
     else
       @tasks = Task.all.order(created_at: :desc)
     end
@@ -55,18 +57,7 @@ class TasksController < ApplicationController
   end
 
   def search
-    @tasks = Task.by_keyword(params[:keyword]).by_status(params[:status])
-    # keyword = params[:keyword]
-    # status = params[:status]
-    # if keyword.present? && status.present?
-    #   @tasks = Task.where("title LIKE ? AND status = ?", "%#{keyword}%", status)
-    # elsif keyword.present?
-    #   @tasks = Task.where("title LIKE ?", "%#{keyword}%")
-    # elsif status.present?
-    #   @tasks = Task.where("status = ?", status)
-    # else
-    #   @tasks = Task.all
-    # end
+    @tasks = Task.by_keyword(params[:keyword]).by_status(params[:status]).priority_sort(params[:priority])
   end
 
   private
