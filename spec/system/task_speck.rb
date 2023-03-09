@@ -94,18 +94,21 @@ RSpec.describe 'タスク管理機能', type: :system do
       end
     end
   
-  #   describe 'タイトルとステータスで検索する場合' do
-  #     before do
-  #       visit tasks_path
-  #       fill_in 'タイトル', with: 'test'
-  #       select '未着手', from: 'ステータス'
-  #       click_on '検索'
-  #       sleep(0.5)
-  #     end
+    describe 'タイトルとステータスで検索する場合' do
+      before do
+        task1 = FactoryBot.create(:task, title: 'task1', status: '未着手')
+        task2 = FactoryBot.create(:task, title: 'task2', status: '着手中')
+        task3 = FactoryBot.create(:task, title: 'task3', status: '完了')
+        visit tasks_path
+        fill_in 'keyword', with: 'task1'
+        select '未着手', from: 'status'
+        click_on '検索'
+        sleep(0.5)
+      end
   
-  #     it '検索結果に該当するタスクが表示される' do
-  #       expect(page).to have_content 'test title'
-  #     end
-  #   end
+      it '検索結果に該当するタスクが表示される' do
+        expect(page).to have_content 'task1'
+      end
+    end
   end
 end
