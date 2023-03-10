@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   helper_method :current_user
   before_action :login_required
+  protect_from_forgery with: :exception
+  include SessionsHelper
 
   private
   def current_user
