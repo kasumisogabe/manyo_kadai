@@ -34,7 +34,7 @@ class Admin::UsersController < ApplicationController
 
   def destroy
     if @user.destroy
-      redirect_to admin_user_url,notice: "削除しました"
+      redirect_to admin_users_path,notice: "削除しました"
     else
       render :edit
     end
