@@ -7,6 +7,7 @@ class UsersController < ApplicationController
   end
 
   def new
+    redirect_to user_path(current_user.id) if logged_in?
     @user = User.new
   end
 
