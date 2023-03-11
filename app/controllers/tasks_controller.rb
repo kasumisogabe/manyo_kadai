@@ -2,7 +2,7 @@ class TasksController < ApplicationController
   before_action :set_task, only: %i[ show edit update destroy ]
 
   def index
-    @tasks = current_user.tasks.order(created_at: :desc)
+    @tasks = current_user.tasks.order(created_at: :desc).page(params[:page]).per(5)
     if params[:sort_limit]
       @tasks = Task.latest
       @tasks = @tasks.page(params[:page]).per(5)
@@ -10,8 +10,9 @@ class TasksController < ApplicationController
       @tasks = Task.priority_sort
       @tasks = @tasks.page(params[:page]).per(5)
     else
-      @tasks = Task.all.order(created_at: :desc)
-      @tasks = @tasks.page(params[:page]).per(5)
+      # @tasks = Task.all.order(created_at: :desc)
+      # @tasks = @tasks.page(params[:page]).per(5)
+      @tasks = current_user.tasks.order(created_at: :desc).page(params[:page]).per(5)
     end
   end
 
@@ -66,7 +67,7 @@ class TasksController < ApplicationController
 
   private
     def set_task
-      @task = Task.find(params[:id])
+      @task = current_user.tasks.find(params[:id])
     end
 
     def task_params
