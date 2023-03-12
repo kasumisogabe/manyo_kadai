@@ -2,6 +2,7 @@ require 'rails_helper'
 RSpec.describe 'タスク管理機能', type: :system do
   let!(:user) { FactoryBot.create(:user) }
   let!(:label){FactoryBot.create(:label)}
+  let!(:second_label){FactoryBot.create(:label)}
   let!(:task) { FactoryBot.create(:task, user: user) }
   let!(:second_task) { FactoryBot.create(:second_task, user: user) }
 
@@ -36,7 +37,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         fill_in 'コメント', with: 'test description'
         fill_in "終了期限", with: '2023-03-10'
         select '着手中', from: 'ステータス'
-        fill_in "ラベル", with: 'MyString'
+        find_all('input[type="checkbox"]').at(1).check
         click_on '登録'
         expect(page).to have_content 'test title'
         expect(page).to have_content 'test description'
@@ -59,13 +60,13 @@ RSpec.describe 'タスク管理機能', type: :system do
         fill_in 'コメント', with: 'test description'
         fill_in "終了期限", with: '2023-03-10'
         select '着手中', from: 'ステータス'
-        fill_in "ラベル", with: '変更後'
+        page.all('ラベル')[1]
         click_on '登録'
         expect(page).to have_content 'test title'
         expect(page).to have_content 'test description'
         expect(page).to have_content '2023-03-10'
         expect(page).to have_content '着手中'
-        expect(page).to have_content '変更後'
+        expect(page).to have_content 'MyString'
       end
     end
   end

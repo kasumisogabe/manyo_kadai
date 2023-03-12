@@ -47,11 +47,11 @@
   </div>
 
   <div class="field">
-    <%= form.label :labels %><br>
+    <%= form.label :labels, "ラベル" %><br>
     <%= form.collection_check_boxes(:label_ids, Label.all, :id, :name) do |cb| %>
       <%= cb.label { cb.check_box + cb.text } %>
     <% end %>
-    </div>
+  </div>
 
   <div class="actions">
     <%= form.submit "登録", class: "btn btn-primary" %>
