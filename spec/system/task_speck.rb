@@ -1,6 +1,8 @@
 require 'rails_helper'
 RSpec.describe 'タスク管理機能', type: :system do
   let!(:user) { FactoryBot.create(:user) }
+  let!(:label){FactoryBot.create(:label)}
+  let!(:second_label){FactoryBot.create(:label)}
   let!(:task) { FactoryBot.create(:task, user: user) }
   let!(:second_task) { FactoryBot.create(:second_task, user: user) }
 
@@ -21,6 +23,50 @@ RSpec.describe 'タスク管理機能', type: :system do
         expect(page).to have_content 'test description'
         expect(page).to have_content '2023-03-10'
         expect(page).to have_content '着手中'
+      end
+    end
+
+    context 'タスクをラベルつきで新規作成した場合' do
+      it '作成したタスクにラベルつきで表示される' do
+        visit new_session_path
+        fill_in 'session[email]', with: 'ippan@gmail.com'
+        fill_in 'session[password]', with: '12345678'
+        click_button 'Log in'
+        visit new_task_path
+        fill_in 'タスク名', with: 'test title'
+        fill_in 'コメント', with: 'test description'
+        fill_in "終了期限", with: '2023-03-10'
+        select '着手中', from: 'ステータス'
+        find_all('input[type="checkbox"]').at(1).check
+        click_on '登録'
+        expect(page).to have_content 'test title'
+        expect(page).to have_content 'test description'
+        expect(page).to have_content '2023-03-10'
+        expect(page).to have_content '着手中'
+        expect(page).to have_content 'MyString'
+      end
+    end
+  end
+
+  describe '編集機能' do
+    context 'タスクとラベルを編集した場合' do
+      it '編集したタスクが表示される' do
+        visit new_session_path
+        fill_in 'session[email]', with: 'ippan@gmail.com'
+        fill_in 'session[password]', with: '12345678'
+        click_button 'Log in'
+        visit edit_task_path(task)
+        fill_in 'タスク名', with: 'test title'
+        fill_in 'コメント', with: 'test description'
+        fill_in "終了期限", with: '2023-03-10'
+        select '着手中', from: 'ステータス'
+        page.all('ラベル')[1]
+        click_on '登録'
+        expect(page).to have_content 'test title'
+        expect(page).to have_content 'test description'
+        expect(page).to have_content '2023-03-10'
+        expect(page).to have_content '着手中'
+        expect(page).to have_content 'MyString'
       end
     end
   end
@@ -61,6 +107,18 @@ RSpec.describe 'タスク管理機能', type: :system do
         visit task_path(task)
         expect(page).to have_content 'test_title'
         expect(page).to have_content 'test_content'
+      end
+    end
+
+    context 'タスク詳細画面に遷移した場合' do
+      it '該当タスクのラベルが表示される' do
+        visit new_session_path
+        fill_in 'session_email', with: user.email
+        fill_in 'session_password', with: user.password
+        click_button "Log in"
+        visit tasks_path
+        visit task_path(task)
+        expect(page).to have_content 'MyString'
       end
     end
   end
@@ -112,6 +170,23 @@ RSpec.describe 'タスク管理機能', type: :system do
   
       it '検索結果に該当するタスクが表示される' do
         expect(page).to have_content 'test_title'
+      end
+    end
+
+    describe 'ラベル検索機能' do
+      describe 'ラベルで検索する場合' do
+        it '検索結果に該当するラベルが表示される' do
+        visit new_session_path
+        fill_in 'session[email]', with: 'ippan@gmail.com'
+        fill_in 'session[password]', with: '12345678'
+        click_button 'Log in'
+        visit tasks_path
+        fill_in 'label_search', with: 'MyString'
+        click_on '検索'
+        sleep(0.5)
+        
+        expect(page).to have_content 'MyString'
+        end
       end
     end
   

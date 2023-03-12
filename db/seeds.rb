@@ -10,7 +10,32 @@
   name = "name"
   password = "password"
   User.create!(name: name,
-               email: email,
-               password_digest: password,
-               )
+                email: email,
+                password: password,
+                )
+end
+
+users = User.all
+users = users.map{|user|user.id}
+
+10.times do |t|
+  title = "title"
+  content = "content"
+  limit = "limit"
+  status = "status"
+  priority = "高"
+  user_id = "users.sample"
+  Task.create!(title: title,
+                content: content,
+                limit: limit,
+                status: status,
+                priority: priority,
+                user_id: users.sample,
+                )
+end
+
+10.times do |l|
+  name = Faker::Games::Pokemon.name
+  Label.create!(name: name,
+                )
 end
