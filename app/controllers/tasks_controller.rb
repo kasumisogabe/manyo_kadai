@@ -3,6 +3,7 @@ class TasksController < ApplicationController
 
   def index
     @tasks = current_user.tasks.order(created_at: :desc).page(params[:page]).per(5)
+    @tasks = @tasks.joins(:labels).where(labels: { id: params[:label_id] }) if params[:label_id].present?
     if params[:sort_limit]
       @tasks = Task.latest
       @tasks = @tasks.page(params[:page]).per(5)
@@ -21,6 +22,7 @@ class TasksController < ApplicationController
 
   def new
     @task = Task.new
+    @task.labels.build
   end
 
   def edit
@@ -62,7 +64,7 @@ class TasksController < ApplicationController
   end
 
   def search
-    @tasks = Task.by_keyword(params[:keyword]).by_status(params[:status]).priority_sort
+    @tasks = Task.by_keyword(params[:keyword]).by_status(params[:status]).priority_sort.search_name(params[:label_search])
   end
 
   private
@@ -71,6 +73,6 @@ class TasksController < ApplicationController
     end
 
     def task_params
-      params.require(:task).permit(:title, :content, :limit, :status, :priority)
+      params.require(:task).permit(:title, :content, :limit, :status, :priority,labels_attributes: [:name, :id])
     end
 end
